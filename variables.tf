@@ -129,36 +129,18 @@ resource "local_file" "devops-var" {
 terraform plan
 terraform apply
 ls #file name changed filename1,filenme2#
-
-
-resource "local_file" "devops" {
-  filename = "/home/practicevm1/Day1/terraform-variables/devopstest.txt"
-  content  = var.content_map["content1"]
-}
-
-resource "local_file" "devops-var" {
-  filename = var.filename
-  content  = var.content_map["content2"]
-}
-
-output "devops_op_trainer" {
-  value = var.devops_op_trainer
-}
-
-output "aws_ec2_instance" {
-  value = var.aws_ec2_object
-}
-practicevm1@practicevm1:~/Day1/terraform-variables$ cat variables.tf
+===================================================================
+vim terraform-variables.tf
 variable "filename" {
-  default = "/home/practicevm1/Day1/terraform-variables/devope_automated.txt"
+  default = "/home/practicevm1/Day1/terraform-variables/devops_automated.txt"
 }
-
 variable "content" {
   default = "This is auto generated from a variable"
 }
-
 variable "devops_op_trainer" {}
-
+output "devops_op_trainer" {
+  value = var.devops_op_trainer
+}
 variable "content_map" {
   type = map(any)
   default = {
@@ -166,13 +148,11 @@ variable "content_map" {
     "content2" = "This is Content2"
   }
 }
-
 variable "file_list" {
-  type = list
-  default = ["/home/practicevm1/Day1/terraform-variables/file1.txt","/home/pract                                                                             icevm1/Day1/terraform-variables/file2.txt"]
+  type = list(string)
+  default = ["/home/practicevm1/Day1/terraform-variables/file1.txt","/home/practicevm1/Day1/terraform-variables/file2.txt"                                                                          icevm1/Day1/terraform-variables/file2.txt"]
 }
-
-variable "aws_ec2_object" {
+variable "aws_ec2_object" {        #user defined data"#
   type = object({
     name = string
     instances = number
@@ -187,7 +167,23 @@ default = {
   ami = "ubuntu-aaw3reoiasddv"
 }
 }
-
-output "tf_batch_students" {
-  value = var.no_of_students
+:wq
+vim main.tf
+resource "local_file" "devops" {
+  filename = var.file_list[0]
+  content  = var.content_map["content1"]
 }
+resource "local_file" "devops-var" {
+  filename = var.file_list[1]
+  content  = var.content_map["content2"]
+}
+output "aws_ec2_instances" {
+  value = var.aws_ec2_object.instances/object
+  :wq
+  terraform plan
+  apply
+
+
+
+
+
